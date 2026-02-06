@@ -1,0 +1,16 @@
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/__init__.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/actions.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/connector.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/constants.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/dedupe.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/errors.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/events.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/gql.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/participants.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/pipeline.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/schema.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/selection.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/state.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/streaming.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/time_utils.py
+/Users/williamlilley/Projects/Data Pipelines/connectors/fireflies/utils_bridge.py

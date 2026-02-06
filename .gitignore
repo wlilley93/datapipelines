@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+ENV/
+.env.local
+.env.*
+!.env.example
+!**/.env.example
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.opencode/
+.ruff_cache/
+
+# Tool state
+config.json
+runs/
+.dlt/
+*.log
+.trello_state*.json
+
+# Logs and event data
+run_logs/
+connector_events.jsonl
+backups/
+
+# Financial analysis outputs
+financial_analysis/output/
+
+# Docker
+/docker-compose.yml
+.env

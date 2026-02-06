@@ -1,0 +1,55 @@
+services:
+  ssm-tunnel:
+    build:
+      context: ..
+      dockerfile: infrastructure/ssm-tunnel/Dockerfile
+    container_name: datapipelines-aws-ssm-tunnel
+    networks:
+      - ssm-net
+    environment:
+      AWS_REGION: ${AWS_REGION:-eu-west-1}
+      AWS_PROFILE: ${AWS_PROFILE:-default}
+      AWS_CLI_CACHE_PATH: /tmp/aws-cli-cache
+      SSM_TARGET: ${SSM_TARGET:?Set SSM_TARGET in your env}
+      SSM_HOST: ${SSM_HOST:?Set SSM_HOST in your env}
+      SSM_REMOTE_PORT: ${SSM_REMOTE_PORT:-5432}
+      SSM_LOCAL_PORT: ${SSM_LOCAL_PORT:-5433}
+      SSM_EXPOSE_PORT: ${SSM_EXPOSE_PORT:-5432}
+    volumes:
+      - ${HOME}/.aws:/root/.aws:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    ports:
+      - "${AWS_TUNNEL_PORT:-55432}:5432"
+    restart: unless-stopped
+
+  datapipelines-api:
+    networks:
+      - ssm-net
+      - default
+    container_name: datapipelines-aws-api
+    environment:
+      - POSTGRES_HOST_OVERRIDE=ssm-tunnel
+      - POSTGRES_PORT_OVERRIDE=5432
+    depends_on:
+      - ssm-tunnel
+
+  adminer:
+    networks:
+      - ssm-net
+      - default
+    container_name: datapipelines-aws-adminer
+    depends_on:
+      - ssm-tunnel
+
+  postgres:
+    container_name: datapipelines-aws-postgres
+
+networks:
+  ssm-net:
+    driver: bridge

@@ -1,0 +1,59 @@
+name: "datapipelines"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dlt_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your env/.env}
+      POSTGRES_DB: ${POSTGRES_DB:-dlt_db}
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - "${ADMINER_PORT:-8000}:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  datapipelines-api:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile.agent
+    container_name: datapipelines-api
+    ports:
+      - "${API_PORT:-8081}:8000"
+    environment:
+      - ORCH_CONFIG_PATH=/app/config.json
+      - RUNS_DIR=/app/runs
+      - RUN_LOGS_DIR=/app/run_logs
+      - DATABASE_URL=${DATABASE_URL}
+      - POSTGRES_HOST_OVERRIDE=postgres
+      - POSTGRES_PORT_OVERRIDE=5432
+      - DATAPIPELINES_API_KEY=${DATAPIPELINES_API_KEY}
+    volumes:
+      - ../config.json:/app/config.json
+      - ../runs:/app/runs
+      - ../run_logs:/app/run_logs
+      - ../.dlt:/app/.dlt
+      - ../orchestrator:/app/orchestrator
+      - ../connectors:/app/connectors
+      - ../server:/app/server
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  pgdata:
